@@ -2,7 +2,7 @@ import Head from "next/head";
 import Link from "next/link";
 import { RouterOutputs, api } from "~/utils/api";
 import { SignInButton, UserButton, SignOutButton, useUser } from "@clerk/nextjs"; // Make sure to import your button components
-import {useState} from 'react'
+
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form"
 
@@ -45,9 +45,11 @@ export default function Sidebar() {
                 </form>
                 <ul className="space-y-4">
                     {collections.data.map((collection) => (
+                      <Link href={`http://localhost:3000/${collection.id}`}>
                         <li key={collection.id} className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow hover:shadow-md transform hover:scale-105 transition-transform duration-150 ease-in-out border dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-900">
                             <p className="text-gray-800 dark:text-gray-100 font-medium">{collection.name}</p>
                         </li>
+                      </Link>
                     ))}
                 </ul>
             </div>

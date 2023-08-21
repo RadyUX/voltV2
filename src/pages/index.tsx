@@ -3,12 +3,12 @@ import Head from "next/head";
 import Link from "next/link";
 import { RouterOutputs, api } from "~/utils/api";
 import { SignInButton, UserButton, SignOutButton, useUser } from "@clerk/nextjs"; // Make sure to import your button components
-import {useState} from 'react'
+import {use, useState} from 'react'
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form"
 
 import Sidebar from "./components/Sidebar";
-import Dialog from "./components/modal";
+import Modal from "./components/modal";
 type Article = {
    title: string
    url: string
@@ -18,21 +18,33 @@ type Article = {
 
 
 export default function Home() {
-
+ const user = useUser()
   const router = useRouter()
-  const { register, handleSubmit } = useForm<Article>();
+  const { register, handleSubmit, reset } = useForm<Article>();
   const { data: collectionsData } = api.collection.getUserCollections.useQuery();
  const createArticle = api.article.create.useMutation()
 
   const onSubmit = (formData: Article) => {
     createArticle.mutateAsync(formData).then(() => {
       router.push("/");
+      reset()
     });
   };
 
-  const handleOpenArticleDialog = () => {
-    router.push(`${router.pathname}?addArticles=y`)
-  };
+  function onClose() {
+    router.push("/")
+  
+    console.log("Modal has closed")
+}
+
+function onOk() {
+     router.push("/")
+    console.log("Ok was clicked")
+}
+
+
+  const handle = () => {
+    router.push(`${router.pathname}?showDialog=y`)}
   return (
     <>
  
@@ -49,7 +61,7 @@ export default function Home() {
      
 
   <h1>Article</h1>
-  <Dialog title="article"></Dialog>
+  <Modal title="article" onClose={onClose} onOk={onOk}>
     <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
             <div>
               <label
@@ -93,28 +105,38 @@ export default function Home() {
             </div>
 
             <select {...register("collectionId", { required: true })}>
-  {collectionsData && collectionsData.map(collection => (
+            {collectionsData && collectionsData.length > 0 ? (
+  collectionsData.map(collection => (
     <option key={collection.id} value={collection.id}>{collection.name}</option>
-  ))}
+  ))
+) : (
+  <option value="">Aucune collection</option>
+)}
 </select>
 
-             
-            <button
+<button
               type="submit"
               className="mb-2 mr-2 rounded-lg bg-blue-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            >
-              Create
+            >create
             </button>
-          </form>
- 
+</form>
+</Modal>
+<div>
+           {user.isSignedIn &&
 
- <div>
- <button
-          onClick={handleOpenArticleDialog}  
+<button
+         onClick={handle}   
               className="mb-2 mr-2 rounded-lg bg-blue-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             >
-              Ajouter un article
+         Ajouter article
             </button>
+           }  
+            
+            </div>
+          
+
+ <div>
+
  </div>
          
       </main>

@@ -16,7 +16,7 @@ type Props = {
     children: React.ReactNode,
 }
 
-export default function Dialog({ title, onClose, onOk, children }: Props) {
+export default function Modal({ title, onClose, onOk, children }: Props) {
 
     const searchParams = useSearchParams()
     const dialogRef = useRef<null | HTMLDialogElement>(null)

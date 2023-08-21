@@ -14,6 +14,7 @@ export const collectionRouter = createTRPCRouter({
     })
 return collections
  }),
+
     
     create: protectedProcedure
     .input(z.object({ name: z.string() }))
@@ -44,4 +45,14 @@ return collections
 
         return newCollection;
     }),
+
+   getCollectionById: protectedProcedure
+   .input(z.object({id: z.string()}))
+   .query(async ({ ctx, input }) => {
+    const collection = await ctx.prisma.collection.findUnique({
+      where: { id: input.id },
+    });
+    return collection
+}),
+    
 });
