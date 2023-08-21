@@ -6,7 +6,7 @@ import Sidebar from "./components/Sidebar";
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (
   <ClerkProvider>
-    <Sidebar/>
+   
   <Component {...pageProps} />;
   </ClerkProvider>
 )
