@@ -3,6 +3,7 @@ import { useAuth } from '@clerk/nextjs';
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { auth, clerkClient } from "@clerk/nextjs";
 import { User } from "@clerk/nextjs/dist/types/server";
+import { create } from "domain";
 
 export const articleRouter = createTRPCRouter({
     
@@ -13,7 +14,32 @@ export const articleRouter = createTRPCRouter({
         where: {userId: userId}
     })
 return articles
- })
+ }),
+
+ create: protectedProcedure
+ .input(z.object({
+    title: z.string(), 
+    url: z.string(),  
+    imageUrl: z.string(),
+    collectionId: z.string()
+ }))
+ .mutation(async ({ctx, input})=>{
+    
+    const existingCollection = await ctx.prisma.collection.findUnique({
+        where: { id: input.collectionId },
+    });
+
+    const newArticle = await ctx.prisma.article.create({
+        data:  {
+            title: input.title,
+            url: input.url,
+            imageUrl: input.imageUrl,
+            collectionId: input.collectionId
+        }
+    })
+    return newArticle
+}
+)
 
     
 });

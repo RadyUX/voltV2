@@ -6,17 +6,33 @@ import { SignInButton, UserButton, SignOutButton, useUser } from "@clerk/nextjs"
 import {useState} from 'react'
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form"
+
 import Sidebar from "./components/Sidebar";
+import Dialog from "./components/modal";
 type Article = {
    title: string
    url: string
-   imageUrl: string,
-   read: boolean,
+   imageUrl: string
    collectionId: string
 }
+
+
 export default function Home() {
+
+  const router = useRouter()
   const { register, handleSubmit } = useForm<Article>();
   const { data: collectionsData } = api.collection.getUserCollections.useQuery();
+ const createArticle = api.article.create.useMutation()
+
+  const onSubmit = (formData: Article) => {
+    createArticle.mutateAsync(formData).then(() => {
+      router.push("/");
+    });
+  };
+
+  const handleOpenArticleDialog = () => {
+    router.push(`${router.pathname}?addArticles=y`)
+  };
   return (
     <>
  
@@ -33,10 +49,11 @@ export default function Home() {
      
 
   <h1>Article</h1>
-    <form className="flex flex-col gap-4">
+  <Dialog title="article"></Dialog>
+    <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
             <div>
               <label
-                htmlFor="name"
+                htmlFor="title"
                 className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
               >
                 Item Name
@@ -61,8 +78,21 @@ export default function Home() {
                 {...register("url", { required: true })}
               />
             </div>
+            <div>
+              <label
+                htmlFor="Imageurl"
+                className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+              >
+                url
+              </label>
+              <input
+                id="Imageurl"
+                className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                {...register("imageUrl", { required: true })}
+              />
+            </div>
 
-            <select {...register("collection")}>
+            <select {...register("collectionId", { required: true })}>
   {collectionsData && collectionsData.map(collection => (
     <option key={collection.id} value={collection.id}>{collection.name}</option>
   ))}
@@ -78,6 +108,15 @@ export default function Home() {
           </form>
  
 
+ <div>
+ <button
+          onClick={handleOpenArticleDialog}  
+              className="mb-2 mr-2 rounded-lg bg-blue-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            >
+              Ajouter un article
+            </button>
+ </div>
+         
       </main>
 
 
