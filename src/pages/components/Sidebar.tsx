@@ -5,8 +5,13 @@ import { SignInButton, UserButton, SignOutButton, useUser } from "@clerk/nextjs"
 
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form"
+import { error } from "console";
 
-type Collection = RouterOutputs["collection"]["getUserCollections"]
+type Collection = {
+  id: string;
+    name: string;
+    userId: string;
+}
 
 export default function Sidebar() {
   const user = useUser();
@@ -20,8 +25,14 @@ export default function Sidebar() {
   const { register, handleSubmit } = useForm<Collection>();
   const onSubmit = (formData: Collection) => {
     createCollection.mutateAsync(formData).then(() => {
-      router.push("/");
-    });
+      void router.push("/");
+      router.reload()
+      
+      
+    })
+    .catch((error)=>{
+      console.error('lol')
+    })
   };
   return (
     <>

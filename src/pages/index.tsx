@@ -62,9 +62,13 @@ function onOk() {
       
       <Navbar/>
   
-      <main className="flex min-h-screen flex  bg-gradient-to-b">
-      <Sidebar/>
-     
+      <main className="grid grid-cols-5  bg-gradient-to-b">
+      <div className="col-span-1">
+    <Sidebar/>
+  </div>
+
+  <div className="col-span-4 p-4">
+  
   <Modal title="article" onClose={onClose} onOk={onOk}>
             <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
                     <div>
@@ -136,6 +140,7 @@ function onOk() {
          Ajouter article
             </button>
            }  
+          
             
             </div>
           
@@ -146,12 +151,11 @@ function onOk() {
  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
     {articles && articles.length > 0 ? (
       articles.map((article) => (
-        <div key={article.id} className="bg-white shadow-lg rounded-lg overflow-hidden dark:bg-gray-800">
+        <div key={article.id} className="bg-white h-[320px] w-full shadow-lg rounded-lg overflow-hidden dark:bg-gray-800">
           <img src={article.imageUrl} alt={article.title} className="w-full h-48 object-cover mb-4 rounded-t-lg" />
           
           <div className="p-4">
             <h2 className="text-xl font-bold dark:text-white mb-2">{article.title}</h2>
-            <p className="text-gray-700 dark:text-gray-300">{article.description}</p> {/* Assuming you might want to add a description */}
 
             <div className="mt-4 flex justify-between items-center">
               {/* Add other details of the article here if needed */}
@@ -169,7 +173,7 @@ function onOk() {
       <p>No articles found.</p>
     )}
 </div>
-
+</div>
       </main>
 
 
