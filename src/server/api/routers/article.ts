@@ -11,10 +11,17 @@ export const articleRouter = createTRPCRouter({
  .query(async({ctx})=>{
     const userId = ctx.auth.userId;
     const articles = await ctx.prisma.article.findMany({
-        where: {userId: userId}
+        where: { 
+            collection: { userId: userId }
+          },
+        orderBy: {
+            createdAt: 'desc'      // Supposition: votre modèle Article a un champ "createdAt"
+        },
+        take: 6
     })
 return articles
  }),
+
 
  create: protectedProcedure
  .input(z.object({

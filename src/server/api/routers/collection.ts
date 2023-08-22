@@ -51,6 +51,7 @@ return collections
    .query(async ({ ctx, input }) => {
     const collection = await ctx.prisma.collection.findUnique({
       where: { id: input.id },
+      include: { articles: true }
     });
     return collection
 }),

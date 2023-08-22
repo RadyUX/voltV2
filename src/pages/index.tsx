@@ -9,6 +9,7 @@ import { useForm } from "react-hook-form"
 
 import Sidebar from "./components/Sidebar";
 import Modal from "./components/modal";
+import Navbar from "./components/Navbar";
 type Article = {
    title: string
    url: string
@@ -23,28 +24,33 @@ export default function Home() {
   const { register, handleSubmit, reset } = useForm<Article>();
   const { data: collectionsData } = api.collection.getUserCollections.useQuery();
  const createArticle = api.article.create.useMutation()
+ const { data: articles} = api.article.getUserArticle.useQuery();
 
   const onSubmit = (formData: Article) => {
     createArticle.mutateAsync(formData).then(() => {
-      router.push("/");
+      void router.push("/");
+      router.reload()
       reset()
-    });
+    
+    })
+    .catch(error =>{
+      console.error('error while creating')
+    })
   };
 
   function onClose() {
-    router.push("/")
-  
+    void router.push("/")
     console.log("Modal has closed")
 }
 
 function onOk() {
-     router.push("/")
+    void router.push("/")
     console.log("Ok was clicked")
 }
 
 
   const handle = () => {
-    router.push(`${router.pathname}?showDialog=y`)}
+    void router.push(`${router.pathname}?showDialog=y`)}
   return (
     <>
  
@@ -54,74 +60,73 @@ function onOk() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       
+      <Navbar/>
   
       <main className="flex min-h-screen flex  bg-gradient-to-b">
       <Sidebar/>
      
-     
-
-  <h1>Article</h1>
   <Modal title="article" onClose={onClose} onOk={onOk}>
-    <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
-            <div>
-              <label
-                htmlFor="title"
-                className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Item Name
-              </label>
-              <input
-                id="title"
-                className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-                {...register("title", { required: true })}
-              />
-            </div>
+            <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
+                    <div>
+                      <label
+                        htmlFor="title"
+                        className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                      >
+                        Item Name
+                      </label>
+                      <input
+                        id="title"
+                        className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                        {...register("title", { required: true })}
+                      />
+                    </div>
 
-            <div>
-              <label
-                htmlFor="url"
-                className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-              >
-                url
-              </label>
-              <input
-                id="url"
-                className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-                {...register("url", { required: true })}
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="Imageurl"
-                className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-              >
-                url
-              </label>
-              <input
-                id="Imageurl"
-                className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-                {...register("imageUrl", { required: true })}
-              />
-            </div>
+                    <div>
+                      <label
+                        htmlFor="url"
+                        className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                      >
+                        url
+                      </label>
+                      <input
+                        id="url"
+                        className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                        {...register("url", { required: true })}
+                      />
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="Imageurl"
+                        className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                      >
+                        url
+                      </label>
+                      <input
+                        id="Imageurl"
+                        className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                        {...register("imageUrl", { required: true })}
+                      />
+                    </div>
 
-            <select {...register("collectionId", { required: true })}>
-            {collectionsData && collectionsData.length > 0 ? (
-  collectionsData.map(collection => (
-    <option key={collection.id} value={collection.id}>{collection.name}</option>
-  ))
-) : (
-  <option value="">Aucune collection</option>
-)}
-</select>
+                    <select {...register("collectionId", { required: true })}>
+                    {collectionsData && collectionsData.length > 0 ? (
+          collectionsData.map(collection => (
+            <option key={collection.id} value={collection.id}>{collection.name}</option>
+          ))
+        ) : (
+          <option value="">Aucune collection</option>
+        )}
+        </select>
 
-<button
-              type="submit"
-              className="mb-2 mr-2 rounded-lg bg-blue-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            >create
-            </button>
-</form>
+        <button
+                      type="submit"
+                      className="mb-2 mr-2 rounded-lg bg-blue-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    >create
+                    </button>
+      </form>
 </Modal>
 <div>
+  
            {user.isSignedIn &&
 
 <button
@@ -138,7 +143,33 @@ function onOk() {
  <div>
 
  </div>
-         
+ <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
+    {articles && articles.length > 0 ? (
+      articles.map((article) => (
+        <div key={article.id} className="bg-white shadow-lg rounded-lg overflow-hidden dark:bg-gray-800">
+          <img src={article.imageUrl} alt={article.title} className="w-full h-48 object-cover mb-4 rounded-t-lg" />
+          
+          <div className="p-4">
+            <h2 className="text-xl font-bold dark:text-white mb-2">{article.title}</h2>
+            <p className="text-gray-700 dark:text-gray-300">{article.description}</p> {/* Assuming you might want to add a description */}
+
+            <div className="mt-4 flex justify-between items-center">
+              {/* Add other details of the article here if needed */}
+              <button
+                className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition duration-300"
+                // Call the delete function
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      ))
+    ) : (
+      <p>No articles found.</p>
+    )}
+</div>
+
       </main>
 
 

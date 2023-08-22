@@ -25,10 +25,10 @@ export default function Sidebar() {
   };
   return (
     <>
-   <div className="h-screen w-64 bg-gradient-to-b from-[#0052A6] to-[#382D91] flex flex-col items-center py-8">
+   <div className="h-screen z-10 w-64 bg-gradient-to-b from-[#0052A6] to-[#382D91] flex flex-col items-center ">
     {user.isSignedIn ? (
         <>
-            <UserButton />
+            <UserButton/>
             <SignOutButton />
             <div className="container flex flex-col gap-12 px-4 py-16 ">
 
