@@ -1,8 +1,10 @@
 import Image from "next/image";
 import { api } from "~/utils/api";
 
+
 export const ArticleView = ({ collectionId }: { collectionId: string }) => {
-    const { data: articles, error, isLoading } = api.article.getUserArticle.useQuery();
+    // Utilisez la requête appropriée pour récupérer les articles d'une collection spécifique
+    const { data: articles, error, isLoading } = api.article.getArticleByCollectionId.useQuery({ collectionId });
     
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>Error loading articles: {error.message}</div>;
@@ -12,10 +14,8 @@ export const ArticleView = ({ collectionId }: { collectionId: string }) => {
         <div>
             {articles.map((article) => (
                 <div key={article.id}>
-                   <Image src={article.imageUrl} alt={article.title} width={500} height={500} />
-                    <h2>{article.title}</h2>
-                    <p>{article.url}</p>
-                    {/* ... other properties ... */}
+                 
+                    
                 </div>
             ))}
         </div>
