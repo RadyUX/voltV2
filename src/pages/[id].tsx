@@ -16,23 +16,17 @@ const CollectionPage: NextPage<{id: string}> = ({ id })=>{
  
   if (!data) return <div>404</div>;
 return (
-    <div>
-      <h1>Collection: {data.name}</h1>
+  <>
+      <h1 className='text-3xl'>Collection: {data.name}</h1>
       {data.articles && data.articles.length > 0 ? (
-        <ul>
-          {data.articles.map(article => (
-            <li key={article.id}>
-                <img src={article.imageUrl} alt={article.title} />
-                    <h2>{article.title}</h2>
-                    <p>{article.url}</p>
-              {/* Affichez d'autres détails sur l'article ici */}
-            </li>
-          ))}
-        </ul>
+        
+          <ArticleView articles={data.articles} />
+        
       ) : (
         <p>Aucun article pour cette collection.</p>
       )}
-    </div>
+    
+    </>
   );
 };
 

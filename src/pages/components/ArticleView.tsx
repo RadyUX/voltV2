@@ -1,23 +1,41 @@
 import Image from "next/image";
-import { api } from "~/utils/api";
+import Link from "next/link";
 
+type ArticleType = {
+    id: string;
+    imageUrl: string;
+    title: string;
+    url: string;
+};
 
-export const ArticleView = ({ collectionId }: { collectionId: string }) => {
-    // Utilisez la requête appropriée pour récupérer les articles d'une collection spécifique
-    const { data: articles, error, isLoading } = api.article.getArticleByCollectionId.useQuery({ collectionId });
-    
-    if (isLoading) return <div>Loading...</div>;
-    if (error) return <div>Error loading articles: {error.message}</div>;
+interface ArticleViewProps {
+    articles: ArticleType[];
+}
+
+export const ArticleView: React.FC<ArticleViewProps> = ({ articles }) => {
     if (!articles || articles.length === 0) return <div>No articles found for this collection.</div>;
 
     return (
-        <div>
-            {articles.map((article) => (
-                <div key={article.id}>
-                 
-                    
+<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
+    {articles.map(article => (
+        <div key={article.id} className="bg-white h-[320px] w-[320px] lg:w-[450px]  shadow-lg rounded-lg overflow-hidden dark:bg-gray-800">
+            <Link href={article.url}>
+                <img src={article.imageUrl} alt={article.title} className="w-full h-48 object-cover mb-4 rounded-t-lg" />
+                <div className="p-4">
+                    <h2 className="text-xl font-bold dark:text-white mb-2">{article.title}</h2>
                 </div>
-            ))}
+            </Link>
+            <div className="mt-4 flex justify-between items-center">
+                <button
+                    className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition duration-300"
+                    // Call the delete function when it's implemented
+                >
+                    Delete
+                </button>
+            </div>
         </div>
+    ))}
+</div>
+
     );
 }

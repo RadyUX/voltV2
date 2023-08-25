@@ -6,7 +6,7 @@ import { SignInButton, UserButton, SignOutButton, useUser } from "@clerk/nextjs"
 import {use, useState} from 'react'
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form"
-
+import { ArticleView } from './components/ArticleView';
 import Sidebar from "./components/Sidebar";
 import Modal from "./components/modal";
 import Navbar from "./components/Navbar";
@@ -148,27 +148,12 @@ function onOk() {
  <div>
 
  </div>
- <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
+ <div className=" mt-4">
     {articles && articles.length > 0 ? (
-      articles.map((article) => (
-        <div key={article.id} className="bg-white h-[320px] w-full shadow-lg rounded-lg overflow-hidden dark:bg-gray-800">
-          <img src={article.imageUrl} alt={article.title} className="w-full h-48 object-cover mb-4 rounded-t-lg" />
-          
-          <div className="p-4">
-            <h2 className="text-xl font-bold dark:text-white mb-2">{article.title}</h2>
-
-            <div className="mt-4 flex justify-between items-center">
-              {/* Add other details of the article here if needed */}
-              <button
-                className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition duration-300"
-                // Call the delete function
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        </div>
-      ))
+     
+      
+        <ArticleView articles={articles}/>
+  
     ) : (
       <p>No articles found.</p>
     )}

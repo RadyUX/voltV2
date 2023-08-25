@@ -45,8 +45,17 @@ return articles
         }
     })
     return newArticle
-}
-)
+}),
+
+delete: protectedProcedure
+  .input(z.string())
+  .mutation(({ctx, input}) => {
+    return ctx.prisma.article.delete({
+      where: {
+        id: input,
+      }
+    });
+  })
 
     
 });
