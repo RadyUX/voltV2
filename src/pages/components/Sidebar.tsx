@@ -57,11 +57,13 @@ export default function Sidebar() {
                 </form>
                 <ul className="space-y-4">
                     {collections?.data?.map((collection) => (
+                      <div key={collection.id}>
                       <Link href={`http://localhost:3000/${collection.id}`}>
-                        <li key={collection.id} className="bg-white  bg-gradient-to-b  from-[#275d99] to-[#275d99]  p-4 rounded-lg shadow hover:shadow-md transform hover:scale-105 transition-transform duration-150 ease-in-out border dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-900 mt-2">
+                        <li className="bg-white  bg-gradient-to-b  from-[#275d99] to-[#275d99]  p-4 rounded-lg shadow hover:shadow-md transform hover:scale-105 transition-transform duration-150 ease-in-out border dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-900 mt-2">
                             <p className="text-gray-800 dark:text-gray-100 font-medium">{collection.name}</p>
                         </li>
                       </Link>
+                      </div>
                     ))}
                 </ul>
             </div>

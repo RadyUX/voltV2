@@ -49,13 +49,24 @@ return articles
 
 delete: protectedProcedure
   .input(z.string())
-  .mutation(({ctx, input}) => {
+  .mutation(async ({ ctx, input }) => {
+    const articleExists = await ctx.prisma.article.findUnique({
+      where: {
+        id: input,
+      }
+    });
+
+    if (!articleExists) {
+      throw new Error("Article not found");
+    }
+
     return ctx.prisma.article.delete({
       where: {
         id: input,
       }
     });
   })
+
 
     
 });
