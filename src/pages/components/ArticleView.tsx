@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { api } from "~/utils/api";
 import { useRouter } from "next/router";
+import {toast} from "react-hot-toast"
 type ArticleType = {
     id: string;
     imageUrl: string;
@@ -16,13 +17,13 @@ interface ArticleViewProps {
 export const ArticleView: React.FC<ArticleViewProps> = ({ articles }) => {
     const router = useRouter();
     if (!articles || articles.length === 0) return <div>No articles found for this collection.</div>;
-    
+
     const deleteArticle = api.article.delete.useMutation();
 
     const handleDelete = (id: string) => {
         deleteArticle.mutate(id);
-        console.log('deleted');
-        router.reload()
+        toast.error("article deleted")
+        router.push('/')
         
     }
 

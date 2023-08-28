@@ -50,13 +50,13 @@ return articles
 delete: protectedProcedure
   .input(z.string())
   .mutation(async ({ ctx, input }) => {
-    const articleExists = await ctx.prisma.article.findUnique({
+    const existingArticle = await ctx.prisma.article.findUnique({
       where: {
         id: input,
       }
     });
 
-    if (!articleExists) {
+    if (!existingArticle) {
       throw new Error("Article not found");
     }
 

@@ -6,7 +6,7 @@ import { SignInButton, UserButton, SignOutButton, useUser } from "@clerk/nextjs"
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form"
 import { error } from "console";
-
+import { toast } from "react-hot-toast";
 type Collection = {
   id: string;
     name: string;
@@ -16,22 +16,26 @@ type Collection = {
 export default function Sidebar() {
   const user = useUser();
   
-
-
-  const createCollection = api.collection.create.useMutation();
   const collections = api.collection.getUserCollections.useQuery()
+
+  const createCollection = api.collection.create.useMutation({
+    onSuccess: () => {
+        collections.refetch();
+    }
+  });
+ 
   const router = useRouter();
 
-  const { register, handleSubmit } = useForm<Collection>();
+  const { register, handleSubmit, reset} = useForm<Collection>();
   const onSubmit = (formData: Collection) => {
     createCollection.mutateAsync(formData).then(() => {
-      void router.push("/");
-      router.reload()
-      
+    
+      toast.success('collection created ⚡')
+      reset()
       
     })
     .catch((error)=>{
-      console.error('lol')
+      toast.error('error')
     })
   };
   return (
@@ -49,7 +53,7 @@ export default function Sidebar() {
                         <label htmlFor="name" className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
                             Enter collection name
                         </label>
-                        <input id="name" className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-[#4B86C4] focus:ring-[#4B86C4] dark:border-gray-600 bg-white dark:text-white dark:placeholder-gray-400 dark:focus:border-[#4B86C4] dark:focus:ring-[#4B86C4]" {...register("name", { required: true })} />
+                        <input id="name" className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-[#4B86C4] focus:ring-[#4B86C4] dark:border-gray-600 bg-white  dark:placeholder-gray-400 dark:focus:border-[#4B86C4] dark:focus:ring-[#4B86C4]" {...register("name", { required: true })} />
                     </div>
                     <button type="submit" className="mb-2 mr-2 rounded-lg bg-gradient-to-b from-[#275d99] to-[#275d99]  px-5 py-2.5 text-sm font-medium text-white hover:bg-[#3A6D9F] focus:outline-none focus:ring-2 focus:ring-[#4B86C4] dark:bg-[#4B86C4] dark:hover:bg-[#3A6D9F] dark:focus:ring-[#4B86C4]">
                         Create

@@ -55,5 +55,25 @@ return collections
     });
     return collection
 }),
-    
+
+delete: protectedProcedure
+  .input(z.string())
+  .mutation(async ({ ctx, input }) => {
+    const existingCollection = await ctx.prisma.collection.findUnique({
+      where: {
+        id: input,
+      }
+    });
+
+    if (!existingCollection) {
+      throw new Error("Collection not found");
+    }
+
+    return ctx.prisma.collection.delete({
+      where: {
+        id: input,
+      }
+    });
+  })
+ 
 });

@@ -4,9 +4,12 @@ import "~/styles/globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import Sidebar from "./components/Sidebar";
 import Navbar from "./components/Navbar";
+import { Toaster } from "react-hot-toast";
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (
+   
   <ClerkProvider>
+     <Toaster/>
   <Component {...pageProps} />;
   </ClerkProvider>
 )

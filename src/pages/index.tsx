@@ -28,9 +28,9 @@ export default function Home() {
 
   const onSubmit = (formData: Article) => {
     createArticle.mutateAsync(formData).then(() => {
-      void router.push("/");
-      router.reload()
+      
       reset()
+      console.log("created")
     
     })
     .catch(error =>{
@@ -74,13 +74,13 @@ function onOk() {
                     <div>
                       <label
                         htmlFor="title"
-                        className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                        className="mb-2 block text-sm font-medium text-gray-900 "
                       >
-                        Item Name
+                        Title
                       </label>
                       <input
                         id="title"
-                        className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                        className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500  dark:focus:border-blue-500 dark:focus:ring-blue-500"
                         {...register("title", { required: true })}
                       />
                     </div>
@@ -88,27 +88,27 @@ function onOk() {
                     <div>
                       <label
                         htmlFor="url"
-                        className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                        className="mb-2 block text-sm font-medium text-gray-900 "
                       >
-                        url
+                       URL
                       </label>
                       <input
                         id="url"
-                        className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                        className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500  dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
                         {...register("url", { required: true })}
                       />
                     </div>
                     <div>
                       <label
                         htmlFor="Imageurl"
-                        className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                        className="mb-2 block text-sm font-medium text-gray-900 "
                       >
-                        url
+                        Image URL
                       </label>
                       <input
                         id="Imageurl"
-                        className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-                        {...register("imageUrl", { required: true })}
+                        className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500  dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                        {...register("imageUrl", { required: false })}
                       />
                     </div>
 
@@ -118,7 +118,7 @@ function onOk() {
             <option key={collection.id} value={collection.id}>{collection.name}</option>
           ))
         ) : (
-          <option value="">Aucune collection</option>
+          <option value="" selected>Aucune collection</option>
         )}
         </select>
 
